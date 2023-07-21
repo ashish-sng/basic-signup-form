@@ -1,0 +1,88 @@
+p {
+  margin: 0;
+  padding: 0;
+  color: red;
+  font-size: small;
+}
+
+.signin {
+  width: 44vw;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.signin > button {
+  width: 8vw;
+  height: 5vh;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: rgb(79, 41, 148);
+  background-color: white;
+  border: 2px solid rgb(79, 41, 148);
+}
+
+.ad__text {
+  width: 44vw;
+  color: rgb(85, 53, 145);
+}
+
+.ad__text > span {
+  font-weight: 600;
+  font-size: 3rem;
+  color: rgb(79, 41, 148);
+}
+
+.form__container {
+  width: 50vw;
+  height: 95vh;
+  display: flex;
+  flex-direction: column;
+  margin-top: 5vh;
+  gap: 1vh;
+  align-items: center;
+}
+
+.form__container__form {
+  width: 44vw;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.name__container {
+  display: flex;
+  gap: 2vw;
+}
+
+.name__field > input {
+  border: 1px solid grey;
+  width: 19vw;
+  height: 4vh;
+  border-radius: 1vh;
+  padding: 1vh 1vw;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.field__container > input {
+  border: 1px solid grey;
+  width: 42vw;
+  height: 4vh;
+  border-radius: 1vh;
+  padding: 1vh 1vw;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.form__buttons > button {
+  width: 44vw;
+  height: 6vh;
+  border-radius: 1vh;
+  padding: 1vh 1vw;
+  font-weight: 600;
+  letter-spacing: 0.4rem;
+  font-size: 1rem;
+  color: white;
+  background-color: rgb(79, 41, 148);
+}
