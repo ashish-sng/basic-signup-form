@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./SignupForm.css";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SignupForm = () => {
   const [firstName, setFirstName] = useState("");
@@ -14,42 +17,55 @@ const SignupForm = () => {
   const [usernameError, setUsernameError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [buttondisabled, setButtonDisabled] = useState(true);
 
-  const handleFormSubmit = (e) => {
+  useEffect(() => {
+    if (
+      firstNameError ||
+      lastNameError ||
+      emailError ||
+      usernameError ||
+      passwordError ||
+      confirmPasswordError
+    ) {
+      setButtonDisabled(true);
+    } else {
+      setButtonDisabled(false);
+    }
+  }, [
+    firstNameError,
+    lastNameError,
+    emailError,
+    usernameError,
+    passwordError,
+    confirmPasswordError,
+  ]);
+
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
-    // Validate form fields
-    let valid = true;
-    if (!firstName) {
-      setFirstNameError("First name is required.");
-      valid = false;
-    }
-    if (!lastName) {
-      setLastNameError("Last name is required.");
-      valid = false;
-    }
-    if (!isValidEmail(email)) {
-      setEmailError("Please enter a valid email address.");
-      valid = false;
-    }
-    if (!username) {
-      setUsernameError("Username is required.");
-      valid = false;
-    }
-    if (!isValidPassword(password)) {
-      setPasswordError(
-        "Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, and one number."
-      );
-      valid = false;
-    }
-    if (password !== confirmPassword) {
-      setConfirmPasswordError("Passwords do not match.");
-      valid = false;
+
+    const data = {
+      firstName,
+      lastName,
+      email,
+      username,
+      password,
+    };
+    try {
+      const response = await axios.post("http://localhost:5000/register", data);
+      console.log(response);
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setUsername("");
+      setPassword("");
+      setConfirmPassword("");
+      toast.success(response.data.message);
+    } catch (error) {
+      toast.error(error.response.data.error);
     }
 
-    if (valid) {
-      // Your form submission logic here
-      console.log("Form submitted successfully!");
-    }
+    console.log("Form submitted successfully!");
   };
 
   const isValidEmail = (email) => {
@@ -62,40 +78,45 @@ const SignupForm = () => {
     return passwordRegex.test(password);
   };
 
-  const handleFirstNameBlur = () => {
-    if (!firstName) {
+  const handleFirstNameChange = (e) => {
+    setFirstName(e.target.value);
+    if (!e.target.value) {
       setFirstNameError("First name is required.");
     } else {
       setFirstNameError("");
     }
   };
 
-  const handleLastNameBlur = () => {
-    if (!lastName) {
+  const handleLastNameChange = (e) => {
+    setLastName(e.target.value);
+    if (!e.target.value) {
       setLastNameError("Last name is required.");
     } else {
       setLastNameError("");
     }
   };
 
-  const handleEmailBlur = () => {
-    if (!isValidEmail(email)) {
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+    if (!isValidEmail(e.target.value)) {
       setEmailError("Please enter a valid email address.");
     } else {
       setEmailError("");
     }
   };
 
-  const handleUsernameBlur = () => {
-    if (!username) {
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+    if (!e.target.value) {
       setUsernameError("Username is required.");
     } else {
       setUsernameError("");
     }
   };
 
-  const handlePasswordBlur = () => {
-    if (!isValidPassword(password)) {
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+    if (!isValidPassword(e.target.value)) {
       setPasswordError(
         "Password must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter, and one number."
       );
@@ -104,22 +125,27 @@ const SignupForm = () => {
     }
   };
 
-  const handleConfirmPasswordBlur = () => {
-    if (password !== confirmPassword) {
+  const handleConfirmPasswordChange = (e) => {
+    setConfirmPassword(e.target.value);
+    if (password !== e.target.value) {
       setConfirmPasswordError("Passwords do not match.");
     } else {
       setConfirmPasswordError("");
     }
   };
 
+  const newFeature = () => {
+    toast.info("This feature is not available yet.");
+  };
+
   return (
     <div className="form__container">
       <div className="signin">
-        <button>SIGN IN</button>
+        <button onClick={newFeature}>SIGN IN</button>
       </div>
       <div className="ad__text">
         <span>Explore & Experience</span>
-        <h3>Get onto your most comfortable journey yet.All the way up.</h3>
+        <h3>Get onto your most comfortable journey yet. All the way up.</h3>
       </div>
       <form className="form__container__form" onSubmit={handleFormSubmit}>
         <div className="name__container">
@@ -129,8 +155,8 @@ const SignupForm = () => {
               name="firstName"
               placeholder="First Name"
               value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              onBlur={handleFirstNameBlur}
+              onChange={handleFirstNameChange}
+              onBlur={handleFirstNameChange} // Perform validation on focus out
               required
             />
             {firstNameError && (
@@ -143,8 +169,8 @@ const SignupForm = () => {
               name="lastName"
               placeholder="Last Name"
               value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              onBlur={handleLastNameBlur}
+              onChange={handleLastNameChange}
+              onBlur={handleLastNameChange} // Perform validation on focus out
               required
             />
             {lastNameError && <p className="error-message">{lastNameError}</p>}
@@ -157,8 +183,8 @@ const SignupForm = () => {
             name="email"
             placeholder="Email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            onBlur={handleEmailBlur}
+            onChange={handleEmailChange}
+            onBlur={handleEmailChange} // Perform validation on focus out
             required
           />
           {emailError && <p className="error-message">{emailError}</p>}
@@ -170,8 +196,8 @@ const SignupForm = () => {
             name="username"
             placeholder="Username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            onBlur={handleUsernameBlur}
+            onChange={handleUsernameChange}
+            onBlur={handleUsernameChange} // Perform validation on focus out
             required
           />
           {usernameError && <p className="error-message">{usernameError}</p>}
@@ -183,8 +209,8 @@ const SignupForm = () => {
             name="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onBlur={handlePasswordBlur}
+            onChange={handlePasswordChange}
+            onBlur={handlePasswordChange} // Perform validation on focus out
             required
           />
           {passwordError && <p className="error-message">{passwordError}</p>}
@@ -196,8 +222,8 @@ const SignupForm = () => {
             name="confirmPassword"
             placeholder="Confirm Password"
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            onBlur={handleConfirmPasswordBlur}
+            onChange={handleConfirmPasswordChange}
+            onBlur={handleConfirmPasswordChange} // Perform validation on focus out
             required
           />
           {confirmPasswordError && (
@@ -206,11 +232,18 @@ const SignupForm = () => {
         </div>
 
         <div className="form__buttons">
-          <button type="submit" className="signin__button">
-            GET STARTED
+          <button
+            disabled={buttondisabled}
+            type="submit"
+            className={`signin__button ${
+              buttondisabled ? "signin__button__disabled" : ""
+            }`}
+          >
+            {buttondisabled ? "COMPLETE THE FORM FIRST" : "GET STARTED"}
           </button>
         </div>
       </form>
+      <ToastContainer />
     </div>
   );
 };

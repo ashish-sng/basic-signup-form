@@ -20,6 +20,7 @@ p {
   color: rgb(79, 41, 148);
   background-color: white;
   border: 2px solid rgb(79, 41, 148);
+  cursor: pointer;
 }
 
 .ad__text {
@@ -85,4 +86,9 @@ p {
   font-size: 1rem;
   color: white;
   background-color: rgb(79, 41, 148);
+  cursor: pointer;
+}
+
+.signin__button__disabled {
+  background-color: grey !important;
 }
