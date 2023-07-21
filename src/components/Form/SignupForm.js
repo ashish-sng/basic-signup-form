@@ -3,6 +3,7 @@ import "./SignupForm.css";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import BASEURL from "../../baseurl";
 
 const SignupForm = () => {
   const [firstName, setFirstName] = useState("");
@@ -52,7 +53,7 @@ const SignupForm = () => {
       password,
     };
     try {
-      const response = await axios.post("http://localhost:5000/register", data);
+      const response = await axios.post(`${BASEURL}/register`, data);
       console.log(response);
       setFirstName("");
       setLastName("");
@@ -60,12 +61,16 @@ const SignupForm = () => {
       setUsername("");
       setPassword("");
       setConfirmPassword("");
-      toast.success(response.data.message);
+      toast.success(response.data.message, {
+        position: "top-center",
+        autoClose: 3000,
+      });
     } catch (error) {
-      toast.error(error.response.data.error);
+      toast.error(error.response.data.error, {
+        position: "top-center",
+        autoClose: 3000,
+      });
     }
-
-    console.log("Form submitted successfully!");
   };
 
   const isValidEmail = (email) => {
